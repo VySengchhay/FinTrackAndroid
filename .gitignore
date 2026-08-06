@@ -1,0 +1,23 @@
+# Gradle
+.gradle/
+build/
+*/build/
+
+# Local configuration
+local.properties
+
+# Android Studio
+.idea/
+*.iml
+
+# Signing files
+*.jks
+*.keystore
+
+# macOS
+.DS_Store
+
+# Generated files
+captures/
+.externalNativeBuild/
+.cxx/

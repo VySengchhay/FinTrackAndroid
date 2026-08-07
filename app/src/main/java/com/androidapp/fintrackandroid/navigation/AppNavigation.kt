@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import com.androidapp.fintrackandroid.feature.auth.LoginScreen
+import com.androidapp.fintrackandroid.feature.auth.presentation.login.LoginScreen
 import com.androidapp.fintrackandroid.feature.auth.SplashScreen
 import com.androidapp.fintrackandroid.feature.budgets.BudgetsScreen
 import com.androidapp.fintrackandroid.feature.dashboard.DashboardScreen
@@ -80,7 +80,7 @@ fun FinTrackApp() {
 
                 entry<LoginRoute> {
                     LoginScreen(
-                        onLoginSuccess = {
+                        onLogin = { _, _ ->
                             replaceBackStack(DashboardRoute)
                         }
                     )

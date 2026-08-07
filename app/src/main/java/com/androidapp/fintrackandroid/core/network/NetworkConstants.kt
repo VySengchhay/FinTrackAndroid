@@ -2,9 +2,6 @@ package com.androidapp.fintrackandroid.core.network
 
 object NetworkConstants {
 
-    // Android Emulator → local backend
-    const val BASE_URL = "http://10.0.2.2:3500/"
-
     // HTTP headers
     const val AUTHORIZATION_HEADER = "Authorization"
     const val CONTENT_TYPE_HEADER = "Content-Type"

@@ -1,5 +1,7 @@
 package com.androidapp.fintrackandroid.di
 
+import com.androidapp.fintrackandroid.BuildConfig
+import com.androidapp.fintrackandroid.core.network.AuthInterceptor
 import com.androidapp.fintrackandroid.core.network.FinTrackApiService
 import com.androidapp.fintrackandroid.core.network.NetworkConstants
 import dagger.Module
@@ -25,7 +27,8 @@ object NetworkModule {
         return Json {
             ignoreUnknownKeys = true
             explicitNulls = false
-            isLenient = true
+            encodeDefaults = true
+            coerceInputValues = true
         }
     }
 
@@ -33,16 +36,26 @@ object NetworkModule {
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+            redactHeader(
+                NetworkConstants.AUTHORIZATION_HEADER
+            )
+
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BASIC
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
         }
     }
 
     @Provides
     @Singleton
     fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor,
         loggingInterceptor: HttpLoggingInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
             .addInterceptor(loggingInterceptor)
             .connectTimeout(
                 NetworkConstants.CONNECT_TIMEOUT,
@@ -68,7 +81,7 @@ object NetworkModule {
         val contentType = NetworkConstants.APPLICATION_JSON.toMediaType()
 
         return Retrofit.Builder()
-            .baseUrl(NetworkConstants.BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(json.asConverterFactory(contentType))
             .build()

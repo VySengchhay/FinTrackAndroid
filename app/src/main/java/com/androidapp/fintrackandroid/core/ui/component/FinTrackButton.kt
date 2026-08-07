@@ -1,10 +1,17 @@
 package com.androidapp.fintrackandroid.core.ui.component
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.androidapp.fintrackandroid.core.ui.theme.FinTrackSpacing
@@ -15,7 +22,9 @@ fun FinTrackButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    isLoading: Boolean = false,
+    loadingText: String = "Loading"
 ) {
     Button(
         onClick = onClick,
@@ -25,16 +34,40 @@ fun FinTrackButton(
         enabled = enabled,
         shape = MaterialTheme.shapes.medium
     ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelLarge
-        )
+        if (isLoading) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(
+                        FinTrackSpacing.large
+                    ),
+                    color = LocalContentColor.current,
+                    strokeWidth = FinTrackSpacing.extraSmall
+                )
+
+                Spacer(
+                    modifier = Modifier
+                        .width(FinTrackSpacing.small)
+                )
+
+                Text(
+                    text = loadingText,
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
+        } else {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelLarge
+            )
+        }
     }
 }
 
+
 @Preview(
     showBackground = true,
-    showSystemUi = true
 )
 @Composable
 private fun FinTrackButtonPreview() {
@@ -42,6 +75,21 @@ private fun FinTrackButtonPreview() {
         FinTrackButton(
             text = "Button",
             onClick = {}
+        )
+    }
+}
+
+@Preview(
+    showBackground = true,
+)
+@Composable
+private fun FinTrackButtonLoadingPreview() {
+    FinTrackTheme() {
+        FinTrackButton(
+            text = "Button",
+            onClick = {},
+            isLoading = true,
+            loadingText = "Signing in"
         )
     }
 }
